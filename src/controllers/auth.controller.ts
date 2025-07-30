@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import config from "../config.js";
 import { users } from "../database/schema.js";
 import { db } from "../database/index.js";
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 
 declare global {
     namespace Express {
