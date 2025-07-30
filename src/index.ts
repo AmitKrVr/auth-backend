@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://192.168.80.76:3000'],
+    origin: ['https://auth-frontend-dun.vercel.app'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', "PATCH"],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
