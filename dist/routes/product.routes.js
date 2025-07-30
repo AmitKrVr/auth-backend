@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from "../controllers/product.controller.js";
+import { authenticateToken } from "../middleware/auth.middleware.js";
+import upload from "../middleware/multerConfig.js";
+const router = Router();
+router.post("/", authenticateToken, upload.single('image'), createProduct);
+router.get("/", getProducts);
+router.get("/:id", getProductById);
+router.patch("/:id", authenticateToken, upload.single('image'), updateProduct);
+router.delete("/:id", authenticateToken, deleteProduct);
+export default router;
