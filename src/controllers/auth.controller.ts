@@ -1,7 +1,7 @@
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import jwt, { SignOptions } from "jsonwebtoken";
-import { eq } from "drizzle-orm";
+import { eq, or } from "drizzle-orm";
 import config from "../config.js";
 import { users } from "../database/schema.js";
 import { db } from "../database/index.js";
@@ -44,17 +44,24 @@ export async function signupController(req: Request, res: Response) {
     const { fullName, email, mobileNo, password } = parsed.data;
 
     try {
-        // checking is user is already registered or not
+        // checking if user already exists by email or mobile number
         const existingUser = await db
             .select()
             .from(users)
-            .where(eq(users.email, email))
+            .where(or(eq(users.email, email), eq(users.mobileNo, mobileNo)))
             .limit(1);
 
         if (existingUser.length > 0) {
-            return res
-                .status(409)
-                .json({ success: false, message: "User with this email already exists." });
+            const user = existingUser[0];
+            if (user.email === email) {
+                return res
+                    .status(409)
+                    .json({ success: false, message: "User with this email already exists." });
+            } else {
+                return res
+                    .status(409)
+                    .json({ success: false, message: "User with this mobile number already exists." });
+            }
         }
 
         // Hashing the password for more security
